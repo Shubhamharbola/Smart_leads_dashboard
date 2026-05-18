@@ -1,6 +1,7 @@
 import { Response } from 'express'
 import Lead from '../models/lead.model'
 import { AuthRequest } from '../middleware/auth.middleware'
+import { Parser } from 'json2csv'
 
 // Create Lead
 export const createLead = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -103,6 +104,22 @@ export const deleteLead = async (req: AuthRequest, res: Response): Promise<void>
       return
     }
     res.status(200).json({ message: 'Lead deleted successfully' })
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error })
+  }
+}
+// Export Leads as CSV
+export const exportLeads = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const leads = await Lead.find({})
+
+    const fields = ['name', 'email', 'status', 'source', 'createdAt']
+    const parser = new Parser({ fields })
+    const csv = parser.parse(leads)
+
+    res.header('Content-Type', 'text/csv')
+    res.attachment('leads.csv')
+    res.send(csv)
   } catch (error) {
     res.status(500).json({ message: 'Server error', error })
   }
