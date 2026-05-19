@@ -10,8 +10,8 @@ interface LeadFormProps {
 const LeadForm = ({ onClose, editLead }: LeadFormProps) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [status, setStatus] = useState('New')
-  const [source, setSource] = useState('Website')
+  const [status, setStatus] = useState<'New' | 'Contacted' | 'Qualified' | 'Lost'>('New')
+  const [source, setSource] = useState<'Website' | 'Instagram' | 'Referral'>('Website')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -79,7 +79,7 @@ const LeadForm = ({ onClose, editLead }: LeadFormProps) => {
             <label className="block text-gray-700 text-sm font-medium mb-1">Status</label>
             <select
               value={status}
-              onChange={(e) => setStatus(e.target.value)}
+              onChange={(e) => setStatus(e.target.value as 'New' | 'Contacted' | 'Qualified' | 'Lost')}
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="New">New</option>
@@ -93,7 +93,7 @@ const LeadForm = ({ onClose, editLead }: LeadFormProps) => {
             <label className="block text-gray-700 text-sm font-medium mb-1">Source</label>
             <select
               value={source}
-              onChange={(e) => setSource(e.target.value)}
+             onChange={(e) => setSource(e.target.value as 'Website' | 'Instagram' | 'Referral')}
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="Website">Website</option>
